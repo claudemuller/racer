@@ -2,11 +2,11 @@
   'use strict';
   
   const PADDLE_WIDTH = 100,
-    TRACK_W = 80,
-    TRACK_H = 20,
-    TRACK_COLS = 10,
+    TRACK_W = 40,
+    TRACK_H = 40,
+    TRACK_COLS = 20,
     TRACK_GAP = 2,
-    TRACK_ROWS = 14;
+    TRACK_ROWS = 15;
   let canvas,
     canvasContext,
     ballX = 75,
@@ -15,8 +15,23 @@
     ballSpeedY = 7,
     mouseX,
     mouseY,
-    trackGrid = new Array(TRACK_COLS * TRACK_ROWS),
-    tracksLeft = 0;
+    trackGrid = [
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+      1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+      1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+      1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
+      1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1,
+      1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+      1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
+      1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+      1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+      1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
+      1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1,
+      1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
+      1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    ];
 
   window.addEventListener('load', function load() {
     canvas = document.getElementById('gameCanvas');
@@ -27,24 +42,12 @@
 
     canvas.addEventListener('mousemove', updateMousePos);
 
-    trackReset();
     ballReset();
   });
 
   function updateAll() {
     update();
     render();
-  }
-
-  function trackReset() {
-    tracksLeft = 0;
-    for (let i = 0; i < 3 * TRACK_COLS; i++) {
-      trackGrid[i] = false;
-    }
-    for (let i = 3 * TRACK_COLS; i < TRACK_COLS * TRACK_ROWS; i++) {
-      trackGrid[i] = true;
-      tracksLeft++;
-    }
   }
 
   function updateMousePos(event) {
@@ -101,9 +104,6 @@
           prevTrackRow = Math.floor(prevBallY / TRACK_H);
         let bothTestsFailed = true;
 
-        trackGrid[trackIndexUnderBall] = false;
-        tracksLeft--;
-
         if (prevTrackCol !== ballTrackCol) {
           if (!isTrackAtColRow(prevTrackCol, ballTrackRow)) {
             ballSpeedX *= -1;
@@ -146,7 +146,7 @@
       for (let col = 0; col < TRACK_COLS; col++) {
         const arrayIndex = rowColToArrayIndex(col, row);
 
-        if (trackGrid[arrayIndex]) colourRect(TRACK_W * col, TRACK_H * row, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
+        if (trackGrid[arrayIndex] === 1) colourRect(TRACK_W * col, TRACK_H * row, TRACK_W - TRACK_GAP, TRACK_H - TRACK_GAP, 'blue');
       }
     }
   }
