@@ -25,7 +25,7 @@
       1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
       1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
       1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
-      1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+      1, 0, 2, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
       1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
       1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1,
       1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
@@ -64,8 +64,17 @@
   }
 
   function ballReset() {
-    ballX = canvas.width / 2;
-    ballY = canvas.height / 2;
+    for (let row = 0; row < TRACK_ROWS; row++) {
+      for (let col = 0; col < TRACK_COLS; col++) {
+        const arrayIndex = rowColToArrayIndex(col, row);
+
+        if (trackGrid[arrayIndex] === 2) {
+          trackGrid[arrayIndex] = 0;
+          ballX = col * TRACK_W + TRACK_W / 2;
+          ballY = row * TRACK_H + TRACK_H / 2;
+        }
+      }
+    }
   }
 
   function ballMove() {
@@ -126,7 +135,7 @@
   }
 
   function update() {
-    ballMove();
+    // ballMove();
 
     ballTrackHandling();
   }
