@@ -1,5 +1,8 @@
 (function () {
   'use strict';
+
+  const carPic = document.createElement('img');
+  let carLoaded = false;
   
   const PADDLE_WIDTH = 100,
     TRACK_W = 40,
@@ -41,6 +44,11 @@
     setInterval(updateAll, 1000 / framesPerSecond);
 
     canvas.addEventListener('mousemove', updateMousePos);
+
+    carPic.onload = function () {
+      carLoaded = true;
+    };
+    carPic.src = 'player1car.png';
 
     ballReset();
   });
@@ -143,7 +151,10 @@
   function render() {
     colourRect(0, 0, canvas.width, canvas.height, 'black');
 
-    colourCircle(ballX, ballY, 10, 'white');
+    //colourCircle(ballX, ballY, 10, 'white');
+    if (carLoaded) {
+      canvasContext.drawImage(carPic, ballX - carPic.width / 2, ballY - carPic.height / 2);
+    }
 
     drawTracks();
 
