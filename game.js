@@ -103,6 +103,7 @@
 
         if (trackGrid[arrayIndex] === 2) {
           trackGrid[arrayIndex] = 0;
+          carAng = -90 * Math.PI / 180.0;
           carX = col * TRACK_W + TRACK_W / 2;
           carY = row * TRACK_H + TRACK_H / 2;
         }
