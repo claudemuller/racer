@@ -9,16 +9,23 @@
     TRACK_H = 40,
     TRACK_COLS = 20,
     TRACK_GAP = 2,
-    TRACK_ROWS = 15;
+    TRACK_ROWS = 15,
+    KEY_UP_ARROW = 38,
+    KEY_DOWN_ARROW = 40,
+    KEY_LEFT_ARROW = 37,
+    KEY_RIGHT_ARROW = 39;
   let canvas,
     canvasContext,
     carX = 75,
     carY = 75,
     carAng = 0,
-    carSpeedX = 5,
-    carSpeedY = 7,
+    carSpeed = 0,
     mouseX,
     mouseY,
+    keyHeld_Gas = false,
+    keyHeld_Reverse = false,
+    keyHeld_TurnLeft = false,
+    keyHeld_TurnRight = false,
     trackGrid = [
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
@@ -46,6 +53,9 @@
 
     canvas.addEventListener('mousemove', updateMousePos);
 
+    document.addEventListener('keydown', keyPressed);
+    document.addEventListener('keyup', keyReleased);
+
     carPic.onload = function () {
       carLoaded = true;
     };
@@ -53,6 +63,20 @@
 
     carReset();
   });
+
+  function keyPressed(event) {
+    if (event.keyCode === KEY_LEFT_ARROW) keyHeld_TurnLeft = true;
+    if (event.keyCode === KEY_RIGHT_ARROW) keyHeld_TurnRight = true;
+    if (event.keyCode === KEY_UP_ARROW) keyHeld_Gas = true;
+    if (event.keyCode === KEY_DOWN_ARROW) keyHeld_Reverse = true;
+  }
+
+  function keyReleased(event) {
+    if (event.keyCode === KEY_LEFT_ARROW) keyHeld_TurnLeft = false;
+    if (event.keyCode === KEY_RIGHT_ARROW) keyHeld_TurnRight = false;
+    if (event.keyCode === KEY_UP_ARROW) keyHeld_Gas = false;
+    if (event.keyCode === KEY_DOWN_ARROW) keyHeld_Reverse = false;
+  }
 
   function updateAll() {
     update();
@@ -87,17 +111,15 @@
   }
 
   function carMove() {
-    // carX += carSpeedX;
-    // carY += carSpeedY;
-    carAng += 0.02;
+    carSpeed *= 0.97;
 
-    if (carX < 0 && carSpeedX < 0.0) carSpeedX *= -1;
-    if (carX > canvas.width && carSpeedX > 0.0) carSpeedX *= -1;
-    if (carY < 0 && carSpeedY < 0.0) carSpeedY *= -1;
-    if (carY > canvas.height) {
-      carReset();
-      trackReset();
-    }
+    if (keyHeld_Gas) carSpeed += 0.3;
+    if (keyHeld_Reverse) carSpeed -= 0.3;
+    if (keyHeld_TurnLeft) carAng -= 0.04;
+    if (keyHeld_TurnRight) carAng += 0.04;
+
+    carX += Math.cos(carAng) * carSpeed;
+    carY += Math.sin(carAng) * carSpeed;
   }
 
   function isTrackAtColRow(col, row) {
@@ -117,29 +139,10 @@
     if (carTrackCol >= 0 && carTrackCol < TRACK_COLS &&
       carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
       if (isTrackAtColRow(carTrackCol, carTrackRow)) {
-        const prevCarX = carX - carSpeedX,
-          prevCarY = carY - carSpeedY,
-          prevTrackCol = Math.floor(prevCarX / TRACK_W),
-          prevTrackRow = Math.floor(prevCarY / TRACK_H);
-        let bothTestsFailed = true;
+        carX -= Math.cos(carAng) * carSpeed;
+        carY -= Math.sin(carAng) * carSpeed;
 
-        if (prevTrackCol !== carTrackCol) {
-          if (!isTrackAtColRow(prevTrackCol, carTrackRow)) {
-            carSpeedX *= -1;
-            bothTestsFailed = false;
-          }
-        }
-        if (prevTrackRow !== carTrackRow) {
-          if (!isTrackAtColRow(carTrackRow, prevTrackCol)) {
-            carSpeedY *= -1;
-            bothTestsFailed = false;
-          }
-        }
-
-        if (bothTestsFailed) {
-          carSpeedX *= -1;
-          carSpeedY *= -1;
-        }
+        carSpeed *= -0.5;
       }
     }
   }
