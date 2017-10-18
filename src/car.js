@@ -13,11 +13,11 @@ let carLoaded = false,
   carAng = 0,
   carSpeed = 0;
 
-function loadCar() {
+function loadCarImage() {
   carPic.onload = function () {
     carLoaded = true;
   };
-  carPic.src = 'player1car.png';
+  carPic.src = 'assets/player1car.png';
 }
 
 function drawCar() {
