@@ -1,7 +1,5 @@
 'use strict';
 
-const carPic = document.createElement('img');
-
 const GROUNDSPEED_DECAY_MULT = 0.94,
   DRIVE_POWER = 0.5,
   REVERSE_POWER = 0.2,
@@ -13,17 +11,8 @@ let carLoaded = false,
   carAng = 0,
   carSpeed = 0;
 
-function loadCarImage() {
-  carPic.onload = function () {
-    carLoaded = true;
-  };
-  carPic.src = 'assets/player1car.png';
-}
-
 function drawCar() {
-  if (carLoaded) {
-    drawBitmapCentredWithRotation(carPic, carX, carY, carAng);
-  }
+  drawBitmapCentredWithRotation(carPic, carX, carY, carAng);
 }
 
 function carReset() {
