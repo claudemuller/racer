@@ -14,7 +14,7 @@ const TRACK_W = 40,
 let trackGrid = [
     4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4,
     4, 4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4, 4,
-    4, 1, 1, 0, 3, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
+    4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 4,
     1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
     1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
     1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1,
@@ -55,35 +55,21 @@ function carTrackHandling() {
 }
 
 function drawTracks() {
+  let arrayIndex = 0,
+    tileX = 0,
+    tileY = 0;
   for (let row = 0; row < TRACK_ROWS; row++) {
     for (let col = 0; col < TRACK_COLS; col++) {
-      const arrayIndex = rowColToArrayIndex(col, row),
-        tileKind = trackGrid[arrayIndex];
+      const tileKind = trackGrid[arrayIndex],
+        useImage = trackPics[tileKind];
 
-      let useImage;
+      canvasContext.drawImage(useImage, tileX, tileY);
 
-      switch (tileKind) {
-        case TRACK_ROAD:
-          useImage = roadPic;
-          break;
-        case TRACK_WALL:
-          useImage = wallPic;
-          break;
-        case TRACK_GOAL:
-          useImage = goalPic;
-          break;
-        case TRACK_TREE:
-          useImage = treePic;
-          break;
-        case TRACK_FLAG:
-          useImage = flagPic;
-          break;
-        default:
-          break;
-      }
-
-      canvasContext.drawImage(useImage, TRACK_W * col, TRACK_H * row);
+      tileX += TRACK_W;
+      arrayIndex++;
     }
+    tileX = 0;
+    tileY += TRACK_H;
   }
 }
 

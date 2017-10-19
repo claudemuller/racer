@@ -1,11 +1,7 @@
-const roadPic = document.createElement('img'),
-  wallPic = document.createElement('img'),
-  carPic = document.createElement('img'),
-  goalPic = document.createElement('img'),
-  treePic = document.createElement('img'),
-  flagPic = document.createElement('img');
+const carPic = document.createElement('img');
 
-let picsToLoad = 0;
+let picsToLoad = 0,
+  trackPics = [];
 
 function countLoadedImagesAndLaunch() {
   picsToLoad--;
@@ -20,16 +16,22 @@ function loadImage(varName, imageName) {
 function loadImages() {
   const imageList = [
     {varName: carPic, fileName: 'player1car.png'},
-    {varName: roadPic, fileName: 'track_road.png'},
-    {varName: wallPic, fileName: 'track_wall.png'},
-    {varName: goalPic, fileName: 'track_goal.png'},
-    {varName: treePic, fileName: 'track_tree.png'},
-    {varName: flagPic, fileName: 'track_flag.png'},
+    {trackType: TRACK_ROAD, fileName: 'track_road.png'},
+    {trackType: TRACK_WALL, fileName: 'track_wall.png'},
+    {trackType: TRACK_GOAL, fileName: 'track_goal.png'},
+    {trackType: TRACK_TREE, fileName: 'track_tree.png'},
+    {trackType: TRACK_FLAG, fileName: 'track_flag.png'},
   ];
 
   picsToLoad = imageList.length;
 
   for (let i = 0; i < imageList.length; i++) {
-    loadImage(imageList[i].varName, imageList[i].fileName);
+    if (imageList[i].varName !== undefined) loadImage(imageList[i].varName, imageList[i].fileName);
+    else loadImageForTrack(imageList[i].trackType, imageList[i].fileName);
   }
+}
+
+function loadImageForTrack(trackCode, fileName) {
+  trackPics[trackCode] = document.createElement('img');
+  loadImage(trackPics[trackCode], fileName);
 }
