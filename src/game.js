@@ -1,7 +1,9 @@
 'use strict';
 
 let canvas,
-  canvasContext;
+  canvasContext,
+  blueCar = new Car(),
+  greenCar = new Car();
 
 window.addEventListener('load', function load() {
   canvas = document.getElementById('gameCanvas');
@@ -18,7 +20,8 @@ function startGame() {
   setInterval(updateAll, 1000 / framesPerSecond);
 
   setupInput();
-  carReset();
+  blueCar.reset();
+  greenCar.reset();
 }
 
 function updateAll() {
@@ -27,9 +30,8 @@ function updateAll() {
 }
 
 function update() {
-  carMove();
-
-  carTrackHandling();
+  blueCar.move();
+  greenCar.move();
 }
 
 function render() {
@@ -37,7 +39,8 @@ function render() {
 
   drawTracks();
 
-  drawCar();
+  blueCar.draw();
+  greenCar.draw();
 }
 
 function clearScreen() {

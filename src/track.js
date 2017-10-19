@@ -21,7 +21,7 @@ let trackGrid = [
     1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
     1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
     1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 1, 1, 0, 0, 1,
-    1, 0, 2, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+    1, 2, 2, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
     1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1,
     1, 1, 1, 1, 0, 0, 0, 1, 1, 4, 4, 1, 1, 0, 0, 0, 5, 0, 0, 1,
     0, 3, 0, 0, 0, 0, 0, 1, 1, 4, 4, 1, 1, 0, 0, 0, 0, 0, 0, 1,
@@ -38,18 +38,17 @@ function isObstacleAtColRow(col, row) {
   } else return false;
 }
 
-function carTrackHandling() {
-  const carTrackCol = Math.floor(carX / TRACK_W),
-    carTrackRow = Math.floor(carY / TRACK_H),
-    trackIndexUnderCar = rowColToArrayIndex(carTrackCol, carTrackRow);
+function carTrackHandling(car) {
+  const carTrackCol = Math.floor(car.x / TRACK_W),
+    carTrackRow = Math.floor(car.y / TRACK_H);
 
   if (carTrackCol >= 0 && carTrackCol < TRACK_COLS &&
     carTrackRow >= 0 && carTrackRow < TRACK_ROWS) {
     if (isObstacleAtColRow(carTrackCol, carTrackRow)) {
-      carX -= Math.cos(carAng) * carSpeed;
-      carY -= Math.sin(carAng) * carSpeed;
+      car.x -= Math.cos(car.ang) * car.speed;
+      car.y -= Math.sin(car.ang) * car.speed;
 
-      carSpeed *= -0.5;
+      car.speed *= -0.5;
     }
   }
 }

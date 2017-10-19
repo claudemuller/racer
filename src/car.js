@@ -6,42 +6,47 @@ const GROUNDSPEED_DECAY_MULT = 0.94,
   TURN_RATE = 0.06,
   MIN_SPEED_TO_TURN = 0.5;
 
-let carLoaded = false,
-  carX = 75,
-  carY = 75,
-  carAng = 0,
-  carSpeed = 0;
+function Car() {
+  this.x = 75;
+  this.y = 75;
+  this.ang = 0;
+  this.speed = 0;
 
-function drawCar() {
-  drawBitmapCentredWithRotation(carPic, carX, carY, carAng);
-}
+  this.reset = function () {
+    for (let row = 0; row < TRACK_ROWS; row++) {
+      for (let col = 0; col < TRACK_COLS; col++) {
+        const arrayIndex = rowColToArrayIndex(col, row);
 
-function carReset() {
-  for (let row = 0; row < TRACK_ROWS; row++) {
-    for (let col = 0; col < TRACK_COLS; col++) {
-      const arrayIndex = rowColToArrayIndex(col, row);
+        if (trackGrid[arrayIndex] === TRACK_PLAYER_START) {
+          trackGrid[arrayIndex] = TRACK_ROAD;
+          this.ang = -90 * Math.PI / 180.0;
+          this.x = col * TRACK_W + TRACK_W / 2;
+          this.y = row * TRACK_H + TRACK_H / 2;
 
-      if (trackGrid[arrayIndex] === TRACK_PLAYER_START) {
-        trackGrid[arrayIndex] = TRACK_ROAD;
-        carAng = -90 * Math.PI / 180.0;
-        carX = col * TRACK_W + TRACK_W / 2;
-        carY = row * TRACK_H + TRACK_H / 2;
+          return;
+        }
       }
     }
-  }
-}
+  };
 
-function carMove() {
-  carSpeed *= GROUNDSPEED_DECAY_MULT;
+  this.move = function () {
+    this.speed *= GROUNDSPEED_DECAY_MULT;
 
-  if (keyHeld_Gas) carSpeed += DRIVE_POWER;
-  if (keyHeld_Reverse) carSpeed -= REVERSE_POWER;
-  if (Math.abs(carSpeed) > MIN_SPEED_TO_TURN) {
-    if (keyHeld_TurnLeft) carAng -= TURN_RATE;
-    if (keyHeld_TurnRight) carAng += TURN_RATE;
-  }
+    if (keyHeld_Gas) this.speed += DRIVE_POWER;
+    if (keyHeld_Reverse) this.speed -= REVERSE_POWER;
+    if (Math.abs(this.speed) > MIN_SPEED_TO_TURN) {
+      if (keyHeld_TurnLeft) this.ang -= TURN_RATE;
+      if (keyHeld_TurnRight) this.ang += TURN_RATE;
+    }
 
-  carX += Math.cos(carAng) * carSpeed;
-  carY += Math.sin(carAng) * carSpeed;
+    this.x += Math.cos(this.ang) * this.speed;
+    this.y += Math.sin(this.ang) * this.speed;
+
+    carTrackHandling(this);
+  };
+
+  this.draw = function () {
+    drawBitmapCentredWithRotation(carPic, this.x, this.y, this.ang);
+  };
 }
 
