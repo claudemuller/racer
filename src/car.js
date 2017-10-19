@@ -11,8 +11,25 @@ function Car() {
   this.y = 75;
   this.ang = 0;
   this.speed = 0;
+  this.myCarPic;
+  this.keyHeld_Gas = false;
+  this.keyHeld_Reverse = false;
+  this.keyHeld_TurnLeft = false;
+  this.keyHeld_TurnRight = false;
+  this.controlKeyUp;
+  this.controlKeyDown;
+  this.controlKeyLeft;
+  this.controlKeyRight;
 
-  this.reset = function () {
+  this.setupInput = function (up, down, left, right) {
+    this.controlKeyUp = up;
+    this.controlKeyDown = down;
+    this.controlKeyLeft = left;
+    this.controlKeyRight = right;
+  };
+
+  this.reset = function (image) {
+    this.myCarPic = image;
     for (let row = 0; row < TRACK_ROWS; row++) {
       for (let col = 0; col < TRACK_COLS; col++) {
         const arrayIndex = rowColToArrayIndex(col, row);
@@ -32,11 +49,11 @@ function Car() {
   this.move = function () {
     this.speed *= GROUNDSPEED_DECAY_MULT;
 
-    if (keyHeld_Gas) this.speed += DRIVE_POWER;
-    if (keyHeld_Reverse) this.speed -= REVERSE_POWER;
+    if (this.keyHeld_Gas) this.speed += DRIVE_POWER;
+    if (this.keyHeld_Reverse) this.speed -= REVERSE_POWER;
     if (Math.abs(this.speed) > MIN_SPEED_TO_TURN) {
-      if (keyHeld_TurnLeft) this.ang -= TURN_RATE;
-      if (keyHeld_TurnRight) this.ang += TURN_RATE;
+      if (this.keyHeld_TurnLeft) this.ang -= TURN_RATE;
+      if (this.keyHeld_TurnRight) this.ang += TURN_RATE;
     }
 
     this.x += Math.cos(this.ang) * this.speed;
@@ -46,7 +63,7 @@ function Car() {
   };
 
   this.draw = function () {
-    drawBitmapCentredWithRotation(carPic, this.x, this.y, this.ang);
+    drawBitmapCentredWithRotation(this.myCarPic, this.x, this.y, this.ang);
   };
 }
 

@@ -1,4 +1,5 @@
-const carPic = document.createElement('img');
+const carPic = document.createElement('img'),
+  otherCarPic = document.createElement('img');
 
 let picsToLoad = 0,
   trackPics = [];
@@ -16,6 +17,7 @@ function loadImage(varName, imageName) {
 function loadImages() {
   const imageList = [
     {varName: carPic, fileName: 'player1car.png'},
+    {varName: otherCarPic, fileName: 'player2car.png'},
     {trackType: TRACK_ROAD, fileName: 'track_road.png'},
     {trackType: TRACK_WALL, fileName: 'track_wall.png'},
     {trackType: TRACK_GOAL, fileName: 'track_goal.png'},
