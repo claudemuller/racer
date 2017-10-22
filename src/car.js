@@ -12,6 +12,7 @@ function Car() {
   this.ang = 0;
   this.speed = 0;
   this.myCarPic;
+  this.name = 'Untitled car';
   this.keyHeld_Gas = false;
   this.keyHeld_Reverse = false;
   this.keyHeld_TurnLeft = false;
@@ -28,8 +29,11 @@ function Car() {
     this.controlKeyRight = right;
   };
 
-  this.reset = function (image) {
+  this.reset = function (image, name) {
+    this.name = name;
     this.myCarPic = image;
+    this.speed = 0;
+
     for (let row = 0; row < TRACK_ROWS; row++) {
       for (let col = 0; col < TRACK_COLS; col++) {
         const arrayIndex = rowColToArrayIndex(col, row);
@@ -44,6 +48,8 @@ function Car() {
         }
       }
     }
+
+    console.log('No player start found!');
   };
 
   this.move = function () {
